@@ -4,6 +4,8 @@ var grid = [];
 
 var current;
 
+var stack = [];
+
 function setup() {
   createCanvas(400, 400);
   cols = floor(width / w);
@@ -33,30 +35,14 @@ function draw() {
   var next = current.checkNeighbors();
   if (next) {
     next.visited = true;
+    // Step 2
+    stack.push(current);
     // Step 3
     removeWalls(current, next);
 
     // Step 4
     current = next;
-  }
-}
-
-function removeWalls(a, b) {
-  var x = a.i - b.i;
-  if (x === 1) {
-    a.walls[3] = false;
-    b.walls[1] = false;
-  } else if (x === -1) {
-    a.walls[1] = false;
-    b.walls[3] = false;
-  }
-
-  var y = a.j - b.j;
-  if (y === 1) {
-    a.walls[0] = false;
-    b.walls[2] = false;
-  } else if (y === -1) {
-    a.walls[2] = false;
-    b.walls[0] = false;
+  } else if (stack.length > 0) {
+    current = stack.pop();
   }
 }
